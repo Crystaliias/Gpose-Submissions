@@ -1,25 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import { contestEntries } from './data';
 
-function App() {
+export default function Gallery() {
+  const [index, setIndex] = useState(0);
+  const [showMore, setShowMore] = useState(false);
+  const hasNext = index < contestEntries.length - 1;
+
+  function handleNextClick() {
+    if (hasNext) { 
+      setIndex(index + 1);
+    } else {
+      setIndex(0);
+    }
+  }
+
+  function handleMoreClick() {
+    setShowMore(!showMore);
+  }
+
+  let entry = contestEntries[index];
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <button onClick={handleNextClick}>
+        Next
+      </button>
+      <h2>
+        <i>{entry.title} </i>
+        by {entry.gposer}
+      </h2>
+      <h3>
+        ({index + 1} of {contestEntries.length})
+      </h3>
+      <button onClick={handleMoreClick}>
+        {showMore ? 'Hide' : 'Show'} details
+      </button>
+      {showMore && <p>{entry.month} {entry.year}</p>}
+      {showMore && <p>Theme: {entry.theme}</p>}
+      {showMore && <p>Category: {entry.category}</p>}
+      <img
+        src={entry.img}
+        width="960"
+        height="540"
+      />
+    </>
   );
 }
-
-export default App;
